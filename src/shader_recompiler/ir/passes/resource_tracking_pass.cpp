@@ -669,6 +669,7 @@ void PatchImageInstruction(IR::Block& block, IR::Inst& inst, Info& info, Descrip
         .is_depth = bool(inst_info.is_depth),
         .is_atomic = IsImageAtomicInstruction(inst),
         .is_array = bool(inst_info.is_array),
+        .is_written = inst.GetOpcode() == IR::Opcode::ImageWrite,
     });
 
     // Sample instructions must be resolved into a new instruction using address register data.

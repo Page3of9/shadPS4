@@ -71,6 +71,7 @@ struct ImageResource {
     bool is_depth{};
     bool is_atomic{};
     bool is_array{};
+    bool is_written{};
 
     constexpr AmdGpu::Image GetSharp(const Info& info) const noexcept;
 };

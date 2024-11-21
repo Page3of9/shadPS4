@@ -46,8 +46,10 @@ TextureCache::~TextureCache() = default;
 void TextureCache::InvalidateMemory(VAddr addr, VAddr addr_aligned, size_t size) {
     std::scoped_lock lock{mutex};
     ForEachImageInRegion(addr_aligned, size, [&](ImageId image_id, Image& image) {
+        const auto heuristic =
+            addr < image.info.guest_address && True(image.flags & ImageFlagBits::GpuModified);
         const auto image_end = image.info.guest_address + image.info.guest_size_bytes;
-        if (addr < image_end) {
+        if (addr < image_end && !heuristic) {
             // Ensure image is reuploaded when accessed again.
             image.flags |= ImageFlagBits::CpuDirty;
         }

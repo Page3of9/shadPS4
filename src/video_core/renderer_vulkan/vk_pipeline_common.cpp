@@ -160,7 +160,6 @@ void Pipeline::BindBuffers(VideoCore::BufferCache& buffer_cache,
 void Pipeline::BindTextures(VideoCore::TextureCache& texture_cache, const Shader::Info& stage,
                             Shader::Backend::Bindings& binding,
                             DescriptorWrites& set_writes) const {
-
     using ImageBindingInfo = std::tuple<VideoCore::ImageId, AmdGpu::Image, Shader::ImageResource>;
     static boost::container::static_vector<ImageBindingInfo, 32> image_bindings;
 
@@ -173,6 +172,9 @@ void Pipeline::BindTextures(VideoCore::TextureCache& texture_cache, const Shader
             const auto image_id = texture_cache.FindImage(image_info);
             auto& image = texture_cache.GetImage(image_id);
             image.flags |= VideoCore::ImageFlagBits::Bound;
+            if (image_desc.is_written) {
+                image.flags |= VideoCore::ImageFlagBits::GpuModified;
+            }
             image_bindings.emplace_back(image_id, tsharp, image_desc);
         } else {
             image_bindings.emplace_back(VideoCore::ImageId{}, tsharp, image_desc);
