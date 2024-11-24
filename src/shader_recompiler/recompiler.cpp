@@ -65,21 +65,18 @@ IR::Program TranslateProgram(std::span<const u32> code, Pools& pools, Info& info
     // Run optimization passes
     const auto stage = program.info.stage;
 
-    bool dump_ir = true;
     auto dumpMatchingIR = [&](std::string phase) {
-        if (dump_ir) {
-            if (Config::dumpShaders()) {
-                std::string s = IR::DumpProgram(program);
-                using namespace Common::FS;
-                const auto dump_dir = GetUserPath(PathType::ShaderDir) / "dumps";
-                if (!std::filesystem::exists(dump_dir)) {
-                    std::filesystem::create_directories(dump_dir);
-                }
-                const auto filename =
-                    fmt::format("{}_{:#018x}.{}.ir.txt", info.stage, info.pgm_hash, phase);
-                const auto file = IOFile{dump_dir / filename, FileAccessMode::Write};
-                file.WriteString(s);
+        if (Config::dumpShaders()) {
+            std::string s = IR::DumpProgram(program);
+            using namespace Common::FS;
+            const auto dump_dir = GetUserPath(PathType::ShaderDir) / "dumps";
+            if (!std::filesystem::exists(dump_dir)) {
+                std::filesystem::create_directories(dump_dir);
             }
+            const auto filename =
+                fmt::format("{}_{:#018x}.{}.ir.txt", info.stage, info.pgm_hash, phase);
+            const auto file = IOFile{dump_dir / filename, FileAccessMode::Write};
+            file.WriteString(s);
         }
     };
 
@@ -105,7 +102,7 @@ IR::Program TranslateProgram(std::span<const u32> code, Pools& pools, Info& info
         Shader::Optimization::TessellationPostprocess(program, runtime_info);
     }
     Shader::Optimization::ConstantPropagationPass(program.post_order_blocks);
-    Shader::Optimization::RingAccessElimination(program, runtime_info);
+    Shader::Optimization::RingAccessElimination(program, runtime_info, stage);
     if (stage != Stage::Compute) {
         Shader::Optimization::LowerSharedMemToRegisters(program);
     }
