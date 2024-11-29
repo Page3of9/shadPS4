@@ -85,7 +85,6 @@ private:
     SDL_Window* window{};
     bool is_shown{};
     bool is_open{true};
-
 };
 
 } // namespace Frontend

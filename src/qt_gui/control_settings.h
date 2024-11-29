@@ -3,31 +3,29 @@
 
 #pragma once
 
-#include <QButtonGroup>
-#include <QDialog>
-#include <QComboBox>
-#include <QPushButton>
 #include <string>
-
+#include <QComboBox>
+#include <QDialog>
+#include <QPushButton>
 #include "common/config.h"
 
 namespace Ui {
 class ControlSettings;
 }
 
-
 class ControlSettings : public QDialog {
     Q_OBJECT
-public: 
+public:
     explicit ControlSettings(QWidget* parent = nullptr);
     ~ControlSettings();
-    
+
 private Q_SLOTS:
     void SaveControllerConfig();
     void SetDefault();
+    void AddBoxItems();
+    void GetMappings();
+    void SetUIValues();
 
 private:
     std::unique_ptr<Ui::ControlSettings> ui;
 };
-
- 

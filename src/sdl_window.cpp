@@ -25,64 +25,66 @@
 
 namespace Frontend {
 
-    using Libraries::Pad::OrbisPadButtonDataOffset;
-    std::map<std::string, u32> outputkey_map = {
-        {"dpad_down", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_DOWN},
-        {"dpad_up", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_UP},
-        {"dpad_left", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_LEFT},
-        {"dpad_right", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_RIGHT},
-        {"cross", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CROSS},
-        {"triangle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TRIANGLE},
-        {"square", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_SQUARE},
-        {"circle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CIRCLE},
-        {"options", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_OPTIONS},
-        {"L1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L1},
-        {"R1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R1},
-        {"L3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L3},
-        {"R3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R3},
-        {"L2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L2},
-        {"R2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R2},
-        {"lstickup", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP}, // OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP =  2,000,001
-        {"lstickdown", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKDOWN}, // = 2000002
-        {"lstickleft", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKLEFT}, // = 2000003
-        {"lstickright", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKRIGHT}, // = 2000004
-        {"rstickup", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKUP}, // = 2000005
-        {"rstickdown", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKDOWN}, // = 2000006
-        {"rstickleft", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKLEFT}, // = 2000007
-        {"rstickright", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKRIGHT}, // = 2000008
-        };
+using Libraries::Pad::OrbisPadButtonDataOffset;
+std::map<std::string, u32> outputkey_map = {
+    {"dpad_down", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_DOWN},
+    {"dpad_up", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_UP},
+    {"dpad_left", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_LEFT},
+    {"dpad_right", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_RIGHT},
+    {"cross", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CROSS},
+    {"triangle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TRIANGLE},
+    {"square", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_SQUARE},
+    {"circle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CIRCLE},
+    {"options", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_OPTIONS},
+    {"L1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L1},
+    {"R1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R1},
+    {"L3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L3},
+    {"R3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R3},
+    {"L2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L2},
+    {"R2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R2},
+    {"lstickup", OrbisPadButtonDataOffset::
+                     LEFT_ANALOG_STICKUP}, // OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP
+                                           // =  2,000,001
+    {"lstickdown", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKDOWN},    // = 2000002
+    {"lstickleft", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKLEFT},    // = 2000003
+    {"lstickright", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKRIGHT},  // = 2000004
+    {"rstickup", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKUP},       // = 2000005
+    {"rstickdown", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKDOWN},   // = 2000006
+    {"rstickleft", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKLEFT},   // = 2000007
+    {"rstickright", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKRIGHT}, // = 2000008
+};
 
-        static std::string Amap = "cross";
-        static std::string Ymap = "triangle";
-        static std::string Xmap = "square"; 
-        static std::string Bmap = "circle";
-        static std::string LBmap = "L1";
-        static std::string RBmap = "R1";
-        static std::string dupmap = "dpad_up";
-        static std::string ddownmap = "dpad_down";
-        static std::string dleftmap = "dpad_left";
-        static std::string drightmap = "dpad_right";
-        static std::string rstickmap = "R3";    
-        static std::string lstickmap = "L3";
-        static std::string startmap = "options";
-        static std::string LTmap = "L2";
-        static std::string RTmap = "R2";
-        static std::string Lstickupmap = "lstickup";
-        static std::string Lstickdownmap = "lstickdown";
-        static std::string Lstickleftmap = "lstickleft"; 
-        static std::string Lstickrightmap = "lstickright"; 
-        static bool Lstickbuttons = false; 
-        static bool Lstickswap = false; 
-        static bool LstickinvertY = false; 
-        static bool LstickinvertX = false; 
-        static std::string Rstickupmap = "rstickup"; 
-        static std::string Rstickdownmap = "rstickdown"; 
-        static std::string Rstickleftmap = "rstickleft"; 
-        static std::string Rstickrightmap = "rstickright"; 
-        static bool Rstickbuttons = false; 
-        static bool Rstickswap = false; 
-        static bool RstickinvertY = false; 
-        static bool RstickinvertX = false; 
+static std::string Amap = "cross";
+static std::string Ymap = "triangle";
+static std::string Xmap = "square";
+static std::string Bmap = "circle";
+static std::string LBmap = "L1";
+static std::string RBmap = "R1";
+static std::string dupmap = "dpad_up";
+static std::string ddownmap = "dpad_down";
+static std::string dleftmap = "dpad_left";
+static std::string drightmap = "dpad_right";
+static std::string rstickmap = "R3";
+static std::string lstickmap = "L3";
+static std::string startmap = "options";
+static std::string LTmap = "L2";
+static std::string RTmap = "R2";
+static std::string Lstickupmap = "lstickup";
+static std::string Lstickdownmap = "lstickdown";
+static std::string Lstickleftmap = "lstickleft";
+static std::string Lstickrightmap = "lstickright";
+static bool Lstickbuttons = false;
+static bool Lstickswap = false;
+static bool LstickinvertY = false;
+static bool LstickinvertX = false;
+static std::string Rstickupmap = "rstickup";
+static std::string Rstickdownmap = "rstickdown";
+static std::string Rstickleftmap = "rstickleft";
+static std::string Rstickrightmap = "rstickright";
+static bool Rstickbuttons = false;
+static bool Rstickswap = false;
+static bool RstickinvertY = false;
+static bool RstickinvertX = false;
 
 static Uint32 SDLCALL PollController(void* userdata, SDL_TimerID timer_id, Uint32 interval) {
     auto* controller = reinterpret_cast<Input::GameController*>(userdata);
@@ -142,7 +144,6 @@ WindowSDL::WindowSDL(s32 width_, s32 height_, Input::GameController* controller_
 
     Input::CheckRemapFile();
     RefreshMappings();
-
 }
 
 WindowSDL::~WindowSDL() = default;
@@ -393,7 +394,7 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
 }
 
 void WindowSDL::onGamepadEvent(const SDL_Event* event) {
-   
+
     u32 button = 0;
     std::string buttonanalogmap = "default";
     Input::Axis axis = Input::Axis::AxisMax;
@@ -416,7 +417,7 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
     case SDL_EVENT_GAMEPAD_BUTTON_UP:
         button = sdlGamepadToOrbisButton(event->gbutton.button);
         // if button is mapped to axis, convert to axis inputs, axes are mapped to values 2000001-8
-        if (button > 2000000 ) {
+        if (button > 2000000) {
             if (button == OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP) {
                 axis = Input::Axis::LeftY;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
@@ -542,7 +543,8 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
         if (event->gaxis.axis == SDL_GAMEPAD_AXIS_LEFT_TRIGGER) {
             if (LTmap == "L2" || LTmap == "R2") {
                 controller->Axis(0, axis, Input::GetAxis(0, 0x8000, event->gaxis.value));
-            // if trigger is not mapped to axis, convert to button inputs, axes are mapped to values 2000000+
+                // if trigger is not mapped to axis, convert to button inputs, axes are mapped to
+                // values 2000000+
             } else if (outputkey_map[LTmap] < 2000000) {
                 button = outputkey_map[LTmap];
                 controller->CheckButton(0, button, event->gaxis.value > 120);
@@ -565,8 +567,8 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
             } else if (axis != Input::Axis::AxisMax) {
                 controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, event->gaxis.value));
             }
-        } 
-         if (event->gaxis.axis == SDL_GAMEPAD_AXIS_RIGHTY) {
+        }
+        if (event->gaxis.axis == SDL_GAMEPAD_AXIS_RIGHTY) {
             if (Rstickbuttons) {
                 button = outputkey_map[Rstickupmap];
                 controller->CheckButton(0, button, event->gaxis.value < -15000);
@@ -577,8 +579,8 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
                     axis = Input::Axis::LeftY;
                 }
                 if (RstickinvertY) {
-                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue)); 
-                } else { 
+                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue));
+                } else {
                     controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, event->gaxis.value));
                 }
             }
@@ -594,7 +596,7 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
                     axis = Input::Axis::LeftX;
                 }
                 if (RstickinvertX) {
-                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue)); 
+                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue));
                 } else {
                     controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, event->gaxis.value));
                 }
@@ -611,12 +613,12 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
                     axis = Input::Axis::RightY;
                 }
                 if (LstickinvertY) {
-                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue)); 
+                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue));
                 } else {
                     controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, event->gaxis.value));
                 }
-            } 
-        } 
+            }
+        }
         if (event->gaxis.axis == SDL_GAMEPAD_AXIS_LEFTX) {
             if (Lstickbuttons) {
                 button = outputkey_map[Lstickleftmap];
@@ -628,12 +630,12 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
                     axis = Input::Axis::RightX;
                 }
                 if (LstickinvertX) {
-                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue));  
+                    controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, negaxisvalue));
                 } else {
                     controller->Axis(0, axis, Input::GetAxis(-0x8000, 0x8000, event->gaxis.value));
                 }
             }
-        }    
+        }
     }
 }
 
@@ -683,20 +685,21 @@ void RefreshMappings() {
         ifs.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         const toml::value data = toml::parse("Controller.toml");
     } catch (std::exception& ex) {
-        const std::string ParseErrorMsg = fmt::format("Parse Error 'Controller.toml'. Exception: {}", ex.what());
-        const char *cParseErrorMsg = ParseErrorMsg.c_str();
+        const std::string ParseErrorMsg =
+            fmt::format("Parse Error 'Controller.toml'. Exception: {}", ex.what());
+        const char* cParseErrorMsg = ParseErrorMsg.c_str();
         LOG_ERROR(Lib_Pad, cParseErrorMsg);
         return;
     }
 
     const toml::value data = toml::parse("Controller.toml");
-    Amap = toml::find_or<std::string>(data, "A_button", "remap","cross");
+    Amap = toml::find_or<std::string>(data, "A_button", "remap", "cross");
     Ymap = toml::find_or<std::string>(data, "Y_button", "remap", "triangle");
     Xmap = toml::find_or<std::string>(data, "X_button", "remap", "square");
     Bmap = toml::find_or<std::string>(data, "B_button", "remap", "circle");
     LBmap = toml::find_or<std::string>(data, "Left_bumper", "remap", "L1");
     RBmap = toml::find_or<std::string>(data, "Right_bumper", "remap", "R1");
-    dupmap = toml::find_or<std::string>(data, "dpad_up", "remap","dpad_up");
+    dupmap = toml::find_or<std::string>(data, "dpad_up", "remap", "dpad_up");
     ddownmap = toml::find_or<std::string>(data, "dpad_down", "remap", "dpad_down");
     dleftmap = toml::find_or<std::string>(data, "dpad_left", "remap", "dpad_left");
     drightmap = toml::find_or<std::string>(data, "dpad_right", "remap", "dpad_right");
@@ -705,22 +708,36 @@ void RefreshMappings() {
     startmap = toml::find_or<std::string>(data, "Start", "remap", "options");
     LTmap = toml::find_or<std::string>(data, "Left_trigger", "remap", "L2");
     RTmap = toml::find_or<std::string>(data, "Right_trigger", "remap", "R2");
-    Lstickupmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons", "Left_stick_up_remap", "lstickup");
-    Lstickdownmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons", "Left_stick_down_remap", "lstickdown");
-    Lstickleftmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons", "Left_stick_left_remap", "lstickleft");
-    Lstickrightmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons", "Left_stick_right_remap", "lstickright");
-    Lstickbuttons = toml::find_or<bool>(data, "Left_analog_stick_behavior", "Mapped_to_buttons", false);
+    Lstickupmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons",
+                                             "Left_stick_up_remap", "lstickup");
+    Lstickdownmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons",
+                                               "Left_stick_down_remap", "lstickdown");
+    Lstickleftmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons",
+                                               "Left_stick_left_remap", "lstickleft");
+    Lstickrightmap = toml::find_or<std::string>(data, "If_Left_analog_stick_mapped_to_buttons",
+                                                "Left_stick_right_remap", "lstickright");
+    Lstickbuttons =
+        toml::find_or<bool>(data, "Left_analog_stick_behavior", "Mapped_to_buttons", false);
     Lstickswap = toml::find_or<bool>(data, "Left_analog_stick_behavior", "Swap_sticks", false);
-    LstickinvertY = toml::find_or<bool>(data, "Left_analog_stick_behavior", "Invert_movement_vertical", false);
-    LstickinvertX = toml::find_or<bool>(data, "Left_analog_stick_behavior", "Invert_movement_horizontal", false);
-    Rstickupmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_up_remap", "rstickup");
-    Rstickdownmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_down_remap", "rstickdown");
-    Rstickleftmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_left_remap", "rstickleft");
-    Rstickrightmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_right_remap", "rstickright");
-    Rstickbuttons = toml::find_or<bool>(data, "Right_analog_stick_behavior", "Mapped_to_buttons", false);
+    LstickinvertY =
+        toml::find_or<bool>(data, "Left_analog_stick_behavior", "Invert_movement_vertical", false);
+    LstickinvertX = toml::find_or<bool>(data, "Left_analog_stick_behavior",
+                                        "Invert_movement_horizontal", false);
+    Rstickupmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
+                                             "Right_stick_up_remap", "rstickup");
+    Rstickdownmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
+                                               "Right_stick_down_remap", "rstickdown");
+    Rstickleftmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
+                                               "Right_stick_left_remap", "rstickleft");
+    Rstickrightmap = toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
+                                                "Right_stick_right_remap", "rstickright");
+    Rstickbuttons =
+        toml::find_or<bool>(data, "Right_analog_stick_behavior", "Mapped_to_buttons", false);
     Rstickswap = toml::find_or<bool>(data, "Right_analog_stick_behavior", "Swap_sticks", false);
-    RstickinvertY = toml::find_or<bool>(data, "Right_analog_stick_behavior", "Invert_movement_vertical", false);
-    RstickinvertX = toml::find_or<bool>(data, "Right_analog_stick_behavior", "Invert_movement_horizontal", false); 
+    RstickinvertY =
+        toml::find_or<bool>(data, "Right_analog_stick_behavior", "Invert_movement_vertical", false);
+    RstickinvertX = toml::find_or<bool>(data, "Right_analog_stick_behavior",
+                                        "Invert_movement_horizontal", false);
 }
 
 } // namespace Frontend

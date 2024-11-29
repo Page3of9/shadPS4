@@ -586,7 +586,6 @@ void MainWindow::StartGame() {
     }
 }
 
-
 void MainWindow::SearchGameTable(const QString& text) {
     if (isTableList) {
         for (int row = 0; row < m_game_list_frame->rowCount(); row++) {
