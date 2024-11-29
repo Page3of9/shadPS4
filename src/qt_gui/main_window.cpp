@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <fstream>
+#include <iostream>
 #include <QDockWidget>
 #include <QKeyEvent>
 #include <QProgressDialog>
@@ -10,11 +12,13 @@
 #ifdef ENABLE_UPDATER
 #include "check_update.h"
 #endif
+#include "../sdl_window.h"
 #include "common/io_file.h"
 #include "common/path_util.h"
 #include "common/scm_rev.h"
 #include "common/string_util.h"
 #include "common/version.h"
+#include "control_settings.h"
 #include "core/file_format/pkg.h"
 #include "core/loader.h"
 #include "game_install_dialog.h"
@@ -263,6 +267,12 @@ void MainWindow::CreateConnects() {
                 &MainWindow::OnLanguageChanged);
 
         settingsDialog->exec();
+    });
+
+    connect(ui->controllerButton, &QPushButton::clicked, this, [this]() {
+        Input::CheckRemapFile();
+        auto configWindow = new ControlSettings(this);
+        configWindow->exec();
     });
 
 #ifdef ENABLE_UPDATER
@@ -575,6 +585,7 @@ void MainWindow::StartGame() {
         emulator.Run(path);
     }
 }
+
 
 void MainWindow::SearchGameTable(const QString& text) {
     if (isTableList) {
