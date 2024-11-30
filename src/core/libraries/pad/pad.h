@@ -124,7 +124,7 @@ struct OrbisPadAnalogStick {
     u8 y;
 };
 
-enum class OrbisPadButtonDataOffset : u32 {
+enum OrbisPadButtonDataOffset : u32 {
     None = 0,
     L3 = 0x2,
     R3 = 0x4,
@@ -184,7 +184,7 @@ struct OrbisPadExtensionUnitData {
 };
 
 struct OrbisPadData {
-    OrbisPadButtonDataOffset buttons;
+    u32 buttons;
     OrbisPadAnalogStick leftStick;
     OrbisPadAnalogStick rightStick;
     OrbisPadAnalogButtons analogButtons;

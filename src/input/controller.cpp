@@ -81,12 +81,11 @@ void GameController::AddState(const State& state) {
     m_states_num++;
 }
 
-void GameController::CheckButton(int id, Libraries::Pad::OrbisPadButtonDataOffset button,
-                                 bool is_pressed) {
+void GameController::CheckButton(int id, u32 button, bool isPressed) {
     std::scoped_lock lock{m_mutex};
     auto state = GetLastState();
     state.time = Libraries::Kernel::sceKernelGetProcessTime();
-    if (is_pressed) {
+    if (isPressed) {
         state.buttonsState |= button;
     } else {
         state.buttonsState &= ~button;

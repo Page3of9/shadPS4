@@ -148,7 +148,7 @@ WindowSDL::WindowSDL(s32 width_, s32 height_, Input::GameController* controller_
 
 WindowSDL::~WindowSDL() = default;
 
-void WindowSDL::WaitEvent() {
+void WindowSDL::waitEvent() {
     // Called on main thread
     SDL_Event event;
 
@@ -164,16 +164,16 @@ void WindowSDL::WaitEvent() {
     case SDL_EVENT_WINDOW_RESIZED:
     case SDL_EVENT_WINDOW_MAXIMIZED:
     case SDL_EVENT_WINDOW_RESTORED:
-        OnResize();
+        onResize();
         break;
     case SDL_EVENT_WINDOW_MINIMIZED:
     case SDL_EVENT_WINDOW_EXPOSED:
         is_shown = event.type == SDL_EVENT_WINDOW_EXPOSED;
-        OnResize();
+        onResize();
         break;
     case SDL_EVENT_KEY_DOWN:
     case SDL_EVENT_KEY_UP:
-        OnKeyPress(&event);
+        onKeyPress(&event);
         break;
     case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
     case SDL_EVENT_GAMEPAD_BUTTON_UP:
@@ -183,7 +183,7 @@ void WindowSDL::WaitEvent() {
     case SDL_EVENT_GAMEPAD_TOUCHPAD_DOWN:
     case SDL_EVENT_GAMEPAD_TOUCHPAD_UP:
     case SDL_EVENT_GAMEPAD_TOUCHPAD_MOTION:
-        OnGamepadEvent(&event);
+        onGamepadEvent(&event);
         break;
     case SDL_EVENT_QUIT:
         is_open = false;
@@ -193,16 +193,16 @@ void WindowSDL::WaitEvent() {
     }
 }
 
-void WindowSDL::InitTimers() {
+void WindowSDL::initTimers() {
     SDL_AddTimer(100, &PollController, controller);
 }
 
-void WindowSDL::OnResize() {
+void WindowSDL::onResize() {
     SDL_GetWindowSizeInPixels(window, &width, &height);
     ImGui::Core::OnResize();
 }
 
-void WindowSDL::OnKeyPress(const SDL_Event* event) {
+void WindowSDL::onKeyPress(const SDL_Event* event) {
 #ifdef __APPLE__
     // Use keys that are more friendly for keyboards without a keypad.
     // Once there are key binding options this won't be necessary.
@@ -217,7 +217,7 @@ void WindowSDL::OnKeyPress(const SDL_Event* event) {
     constexpr SDL_Keycode TriangleKey = SDLK_KP_8;
 #endif
 
-    auto button = OrbisPadButtonDataOffset::None;
+    u32 button = 0;
     Input::Axis axis = Input::Axis::AxisMax;
     int axisvalue = 0;
     int ax = 0;
@@ -383,7 +383,7 @@ void WindowSDL::OnKeyPress(const SDL_Event* event) {
     default:
         break;
     }
-    if (button != OrbisPadButtonDataOffset::None) {
+    if (button != 0) {
         controller->CheckButton(0, button, event->type == SDL_EVENT_KEY_DOWN);
     }
     if (axis != Input::Axis::AxisMax) {
@@ -416,56 +416,56 @@ void WindowSDL::onGamepadEvent(const SDL_Event* event) {
         button = sdlGamepadToOrbisButton(event->gbutton.button);
         // if button is mapped to axis, convert to axis inputs, axes are mapped to values 2000001-8
         if (button > 2000000) {
-            if (button == OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP) {
+            if (button == OrbisPadButtonDataOffset::LeftStickUp) {
                 axis = Input::Axis::LeftY;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += -127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (button == OrbisPadButtonDataOffset::LEFT_ANALOG_STICKDOWN) {
+            } else if (button == OrbisPadButtonDataOffset::LeftStickDown) {
                 axis = Input::Axis::LeftY;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += 127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (button == OrbisPadButtonDataOffset::LEFT_ANALOG_STICKLEFT) {
+            } else if (button == OrbisPadButtonDataOffset::LeftStickLeft) {
                 axis = Input::Axis::LeftX;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += -127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (button == OrbisPadButtonDataOffset::LEFT_ANALOG_STICKRIGHT) {
+            } else if (button == OrbisPadButtonDataOffset::LeftStickRight) {
                 axis = Input::Axis::LeftX;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += 127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (button == OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKUP) {
+            } else if (button == OrbisPadButtonDataOffset::RightStickUp) {
                 axis = Input::Axis::RightY;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += -127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (button == OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKDOWN) {
+            } else if (button == OrbisPadButtonDataOffset::RightStickDown) {
                 axis = Input::Axis::RightY;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += 127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKLEFT) {
+            } else if (OrbisPadButtonDataOffset::RightStickLeft) {
                 axis = Input::Axis::RightX;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += -127;
                 } else {
                     axisvalue = 0;
                 }
-            } else if (OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKRIGHT) {
+            } else if (OrbisPadButtonDataOffset::RightStickRight) {
                 axis = Input::Axis::RightX;
                 if (event->type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
                     axisvalue += 127;
@@ -660,9 +660,9 @@ int WindowSDL::sdlGamepadToOrbisButton(u8 button) {
     case SDL_GAMEPAD_BUTTON_START:
         return outputkey_map[startmap];
     case SDL_GAMEPAD_BUTTON_TOUCHPAD:
-        return OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TOUCH_PAD;
+        return OrbisPadButtonDataOffset::TouchPad;
     case SDL_GAMEPAD_BUTTON_BACK:
-        return OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TOUCH_PAD;
+        return OrbisPadButtonDataOffset::TouchPad;
     case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
         return outputkey_map[LBmap];
     case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
