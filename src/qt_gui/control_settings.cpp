@@ -20,15 +20,14 @@ ControlSettings::ControlSettings(QWidget* parent)
     AddBoxItems();
     SetUIValuestoMappings();
 
-    connect(ui->buttonBox, &QDialogButtonBox::clicked, this,
-            [this](QAbstractButton* button) {
-                if (button == ui->buttonBox->button(QDialogButtonBox::Save)) {
-                    SaveControllerConfig();
-                    QWidget::close();
-                } else if (button == ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
-                    SetDefault();
-                }
-            });
+    connect(ui->buttonBox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button) {
+        if (button == ui->buttonBox->button(QDialogButtonBox::Save)) {
+            SaveControllerConfig();
+            QWidget::close();
+        } else if (button == ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
+            SetDefault();
+        }
+    });
 
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close);
 }
@@ -198,25 +197,26 @@ void ControlSettings::SetUIValuestoMappings() {
     ui->RStickSwap->setChecked(
         toml::find_or<bool>(data, "Right_analog_stick_behavior", "Swap_sticks", false));
 
-    ui->ABox->setCurrentText(QString::fromStdString(
-        toml::find_or<std::string>(data, "A_button", "remap", "cross")));
-    ui->BBox->setCurrentText(QString::fromStdString(toml::find_or<std::string>(data, "B_button", "remap", "circle")));
+    ui->ABox->setCurrentText(
+        QString::fromStdString(toml::find_or<std::string>(data, "A_button", "remap", "cross")));
+    ui->BBox->setCurrentText(
+        QString::fromStdString(toml::find_or<std::string>(data, "B_button", "remap", "circle")));
     ui->XBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "X_button", "remap", "square")));
     ui->YBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "Y_button", "remap", "triangle")));
     ui->DpadUpBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "dpad_up", "remap", "dpad_up")));
-    ui->DpadDownBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "dpad_down", "remap", "dpad_down")));
-    ui->DpadLeftBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "dpad_left", "remap", "dpad_left")));
-    ui->DpadRightBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "dpad_right", "remap", "dpad_right")));
-    ui->LClickBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "Left_stick_button", "remap", "L3")));
-    ui->RClickBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "Right_stick_button", "remap", "R3")));
+    ui->DpadDownBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "dpad_down", "remap", "dpad_down")));
+    ui->DpadLeftBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "dpad_left", "remap", "dpad_left")));
+    ui->DpadRightBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "dpad_right", "remap", "dpad_right")));
+    ui->LClickBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "Left_stick_button", "remap", "L3")));
+    ui->RClickBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "Right_stick_button", "remap", "R3")));
     ui->LBBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "Left_bumper", "remap", "L1")));
     ui->RBBox->setCurrentText(
@@ -239,9 +239,9 @@ void ControlSettings::SetUIValuestoMappings() {
         data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_down_remap", "rstickdown")));
     ui->RStickLeftBox->setCurrentText(QString::fromStdString(toml::find_or<std::string>(
         data, "If_Right_analog_stick_mapped_to_buttons", "Right_stick_left_remap", "rstickleft")));
-    ui->RStickRightBox->setCurrentText(
-        QString::fromStdString(toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
-                                             "Right_stick_right_remap", "rstickright")));
+    ui->RStickRightBox->setCurrentText(QString::fromStdString(
+        toml::find_or<std::string>(data, "If_Right_analog_stick_mapped_to_buttons",
+                                   "Right_stick_right_remap", "rstickright")));
     ui->StartBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "Start", "remap", "options")));
 }
