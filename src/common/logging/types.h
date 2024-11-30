@@ -72,6 +72,7 @@ enum class Class : u8 {
     Lib_Rtc,               ///< The LibSceRtc implementation.
     Lib_DiscMap,           ///< The LibSceDiscMap implementation.
     Lib_Png,               ///< The LibScePng implementation.
+    Lib_Jpeg,              ///< The LibSceJpeg implementation.
     Lib_PlayGo,            ///< The LibScePlayGo implementation.
     Lib_Random,            ///< The libSceRandom implementation.
     Lib_Usbd,              ///< The LibSceUsbd implementation.
@@ -88,6 +89,7 @@ enum class Class : u8 {
     Lib_Fiber,             ///< The LibSceFiber implementation.
     Lib_Vdec2,             ///< The LibSceVideodec2 implementation.
     Lib_Videodec,          ///< The LibSceVideodec implementation.
+    Lib_RazorCpu,          ///< The LibRazorCpu implementation.
     Frontend,              ///< Emulator UI
     Render,                ///< Video Core
     Render_Vulkan,         ///< Vulkan backend

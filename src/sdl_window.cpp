@@ -10,9 +10,9 @@
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_video.h>
 #include <toml.hpp>
+
 #include "common/assert.h"
 #include "common/config.h"
-#include "common/version.h"
 #include "core/libraries/pad/pad.h"
 #include "imgui/renderer/imgui_core.h"
 #include "input/controller.h"
@@ -27,31 +27,31 @@ namespace Frontend {
 
 using Libraries::Pad::OrbisPadButtonDataOffset;
 std::map<std::string, u32> outputkey_map = {
-    {"dpad_down", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_DOWN},
-    {"dpad_up", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_UP},
-    {"dpad_left", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_LEFT},
-    {"dpad_right", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_RIGHT},
-    {"cross", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CROSS},
-    {"triangle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TRIANGLE},
-    {"square", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_SQUARE},
-    {"circle", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CIRCLE},
-    {"options", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_OPTIONS},
-    {"L1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L1},
-    {"R1", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R1},
-    {"L3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L3},
-    {"R3", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R3},
-    {"L2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L2},
-    {"R2", OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R2},
+    {"dpad_down", OrbisPadButtonDataOffset::Down},
+    {"dpad_up", OrbisPadButtonDataOffset::Up},
+    {"dpad_left", OrbisPadButtonDataOffset::Left},
+    {"dpad_right", OrbisPadButtonDataOffset::Right},
+    {"cross", OrbisPadButtonDataOffset::Cross},
+    {"triangle", OrbisPadButtonDataOffset::Triangle},
+    {"square", OrbisPadButtonDataOffset::Square},
+    {"circle", OrbisPadButtonDataOffset::Circle},
+    {"options", OrbisPadButtonDataOffset::Options},
+    {"L1", OrbisPadButtonDataOffset::L1},
+    {"R1", OrbisPadButtonDataOffset::R1},
+    {"L3", OrbisPadButtonDataOffset::L3},
+    {"R3", OrbisPadButtonDataOffset::R3},
+    {"L2", OrbisPadButtonDataOffset::L2},
+    {"R2", OrbisPadButtonDataOffset::R2},
     {"lstickup", OrbisPadButtonDataOffset::
-                     LEFT_ANALOG_STICKUP}, // OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP
+                     LeftStickUp}, // OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP
                                            // =  2,000,001
-    {"lstickdown", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKDOWN},    // = 2000002
-    {"lstickleft", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKLEFT},    // = 2000003
-    {"lstickright", OrbisPadButtonDataOffset::LEFT_ANALOG_STICKRIGHT},  // = 2000004
-    {"rstickup", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKUP},       // = 2000005
-    {"rstickdown", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKDOWN},   // = 2000006
-    {"rstickleft", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKLEFT},   // = 2000007
-    {"rstickright", OrbisPadButtonDataOffset::RIGHT_ANALOG_STICKRIGHT}, // = 2000008
+    {"lstickdown", OrbisPadButtonDataOffset::LeftStickDown},    // = 2000002
+    {"lstickleft", OrbisPadButtonDataOffset::LeftStickLeft},    // = 2000003
+    {"lstickright", OrbisPadButtonDataOffset::LeftStickRight},  // = 2000004
+    {"rstickup", OrbisPadButtonDataOffset::RightStickUp},       // = 2000005
+    {"rstickdown", OrbisPadButtonDataOffset::RightStickDown},   // = 2000006
+    {"rstickleft", OrbisPadButtonDataOffset::RightStickLeft},   // = 2000007
+    {"rstickright", OrbisPadButtonDataOffset::RightStickRight}, // = 2000008
 };
 
 static std::string Amap = "cross";
@@ -148,7 +148,7 @@ WindowSDL::WindowSDL(s32 width_, s32 height_, Input::GameController* controller_
 
 WindowSDL::~WindowSDL() = default;
 
-void WindowSDL::waitEvent() {
+void WindowSDL::WaitEvent() {
     // Called on main thread
     SDL_Event event;
 
@@ -164,16 +164,16 @@ void WindowSDL::waitEvent() {
     case SDL_EVENT_WINDOW_RESIZED:
     case SDL_EVENT_WINDOW_MAXIMIZED:
     case SDL_EVENT_WINDOW_RESTORED:
-        onResize();
+        OnResize();
         break;
     case SDL_EVENT_WINDOW_MINIMIZED:
     case SDL_EVENT_WINDOW_EXPOSED:
         is_shown = event.type == SDL_EVENT_WINDOW_EXPOSED;
-        onResize();
+        OnResize();
         break;
     case SDL_EVENT_KEY_DOWN:
     case SDL_EVENT_KEY_UP:
-        onKeyPress(&event);
+        OnKeyPress(&event);
         break;
     case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
     case SDL_EVENT_GAMEPAD_BUTTON_UP:
@@ -183,7 +183,7 @@ void WindowSDL::waitEvent() {
     case SDL_EVENT_GAMEPAD_TOUCHPAD_DOWN:
     case SDL_EVENT_GAMEPAD_TOUCHPAD_UP:
     case SDL_EVENT_GAMEPAD_TOUCHPAD_MOTION:
-        onGamepadEvent(&event);
+        OnGamepadEvent(&event);
         break;
     case SDL_EVENT_QUIT:
         is_open = false;
@@ -193,18 +193,16 @@ void WindowSDL::waitEvent() {
     }
 }
 
-void WindowSDL::initTimers() {
+void WindowSDL::InitTimers() {
     SDL_AddTimer(100, &PollController, controller);
 }
 
-void WindowSDL::onResize() {
+void WindowSDL::OnResize() {
     SDL_GetWindowSizeInPixels(window, &width, &height);
     ImGui::Core::OnResize();
 }
 
-void WindowSDL::onKeyPress(const SDL_Event* event) {
-    using Libraries::Pad::OrbisPadButtonDataOffset;
-
+void WindowSDL::OnKeyPress(const SDL_Event* event) {
 #ifdef __APPLE__
     // Use keys that are more friendly for keyboards without a keypad.
     // Once there are key binding options this won't be necessary.
@@ -219,38 +217,38 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
     constexpr SDL_Keycode TriangleKey = SDLK_KP_8;
 #endif
 
-    u32 button = 0;
+    auto button = OrbisPadButtonDataOffset::None;
     Input::Axis axis = Input::Axis::AxisMax;
     int axisvalue = 0;
     int ax = 0;
     std::string backButtonBehavior = Config::getBackButtonBehavior();
     switch (event->key.key) {
     case SDLK_UP:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_UP;
+        button = OrbisPadButtonDataOffset::Up;
         break;
     case SDLK_DOWN:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_DOWN;
+        button = OrbisPadButtonDataOffset::Down;
         break;
     case SDLK_LEFT:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_LEFT;
+        button = OrbisPadButtonDataOffset::Left;
         break;
     case SDLK_RIGHT:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_RIGHT;
+        button = OrbisPadButtonDataOffset::Right;
         break;
     case TriangleKey:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TRIANGLE;
+        button = OrbisPadButtonDataOffset::Triangle;
         break;
     case CircleKey:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CIRCLE;
+        button = OrbisPadButtonDataOffset::Circle;
         break;
     case CrossKey:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_CROSS;
+        button = OrbisPadButtonDataOffset::Cross;
         break;
     case SquareKey:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_SQUARE;
+        button = OrbisPadButtonDataOffset::Square;
         break;
     case SDLK_RETURN:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_OPTIONS;
+        button = OrbisPadButtonDataOffset::Options;
         break;
     case SDLK_A:
         axis = Input::Axis::LeftX;
@@ -325,19 +323,19 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
         ax = Input::GetAxis(-0x80, 0x80, axisvalue);
         break;
     case SDLK_X:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L3;
+        button = OrbisPadButtonDataOffset::L3;
         break;
     case SDLK_M:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R3;
+        button = OrbisPadButtonDataOffset::R3;
         break;
     case SDLK_Q:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L1;
+        button = OrbisPadButtonDataOffset::L1;
         break;
     case SDLK_U:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R1;
+        button = OrbisPadButtonDataOffset::R1;
         break;
     case SDLK_E:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_L2;
+        button = OrbisPadButtonDataOffset::L2;
         axis = Input::Axis::TriggerLeft;
         if (event->type == SDL_EVENT_KEY_DOWN) {
             axisvalue += 255;
@@ -347,7 +345,7 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
         ax = Input::GetAxis(0, 0x80, axisvalue);
         break;
     case SDLK_O:
-        button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_R2;
+        button = OrbisPadButtonDataOffset::R2;
         axis = Input::Axis::TriggerRight;
         if (event->type == SDL_EVENT_KEY_DOWN) {
             axisvalue += 255;
@@ -362,9 +360,9 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
                                                    : (backButtonBehavior == "right" ? 0.75f : 0.5f);
             // trigger a touchpad event so that the touchpad emulation for back button works
             controller->SetTouchpadState(0, true, x, 0.5f);
-            button = OrbisPadButtonDataOffset::ORBIS_PAD_BUTTON_TOUCH_PAD;
+            button = OrbisPadButtonDataOffset::TouchPad;
         } else {
-            button = 0;
+            button = {};
         }
         break;
     case SDLK_F11:
@@ -385,7 +383,7 @@ void WindowSDL::onKeyPress(const SDL_Event* event) {
     default:
         break;
     }
-    if (button != 0) {
+    if (button != OrbisPadButtonDataOffset::None) {
         controller->CheckButton(0, button, event->type == SDL_EVENT_KEY_DOWN);
     }
     if (axis != Input::Axis::AxisMax) {
