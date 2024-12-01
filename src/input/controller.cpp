@@ -7,9 +7,9 @@
 
 #include "controller.h"
 
+#include <SDL3/SDL.h>
 #include "common/assert.h"
 #include "common/path_util.h"
-#include <SDL3/SDL.h>
 #include "core/libraries/kernel/time.h"
 #include "core/libraries/pad/pad.h"
 #include "input/controller.h"

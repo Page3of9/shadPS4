@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <QPushButton>
 #include <QDialog>
+#include <QPushButton>
 
 namespace Ui {
 class ControlSettings;
