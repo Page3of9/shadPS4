@@ -42,9 +42,7 @@ std::map<std::string, u32> outputkey_map = {
     {"R3", OrbisPadButtonDataOffset::R3},
     {"L2", OrbisPadButtonDataOffset::L2},
     {"R2", OrbisPadButtonDataOffset::R2},
-    {"lstickup", OrbisPadButtonDataOffset::
-                     LeftStickUp}, // OrbisPadButtonDataOffset::LEFT_ANALOG_STICKUP
-                                           // =  2,000,001
+    {"lstickup", OrbisPadButtonDataOffset::LeftStickUp},        //  2,000,001
     {"lstickdown", OrbisPadButtonDataOffset::LeftStickDown},    // = 2000002
     {"lstickleft", OrbisPadButtonDataOffset::LeftStickLeft},    // = 2000003
     {"lstickright", OrbisPadButtonDataOffset::LeftStickRight},  // = 2000004
