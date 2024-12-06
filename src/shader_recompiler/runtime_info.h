@@ -8,8 +8,8 @@
 #include <boost/container/static_vector.hpp>
 #include "common/types.h"
 #include "shader_recompiler/frontend/tessellation.h"
-#include "video_core/amdgpu/types.h"
 #include "video_core/amdgpu/liverpool.h"
+#include "video_core/amdgpu/types.h"
 
 namespace Shader {
 
