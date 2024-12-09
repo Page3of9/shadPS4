@@ -27,7 +27,7 @@ public:
     explicit Rasterizer(const Instance& instance, Scheduler& scheduler,
                         AmdGpu::Liverpool* liverpool);
     ~Rasterizer();
-        
+
     [[nodiscard]] Scheduler& GetScheduler() noexcept {
         return scheduler;
     }

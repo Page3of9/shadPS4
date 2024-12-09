@@ -216,6 +216,7 @@ set(GNM_LIB src/core/libraries/gnmdriver/gnmdriver.cpp
 
 set(KERNEL_LIB src/core/libraries/kernel/threads/condvar.cpp
                src/core/libraries/kernel/threads/event_flag.cpp
+               src/core/libraries/kernel/threads/event_flag.cpp
                src/core/libraries/kernel/threads/exception.cpp
                src/core/libraries/kernel/threads/exception.h
                src/core/libraries/kernel/threads/mutex.cpp
@@ -785,6 +786,8 @@ set(IMGUI src/imgui/imgui_config.h
 
 set(INPUT src/input/controller.cpp
           src/input/controller.h
+          src/input/input_handler.cpp
+          src/input/input_handler.h
 )
 
 set(EMULATOR src/emulator.cpp
@@ -811,9 +814,16 @@ set(QT_GUI src/qt_gui/about_dialog.cpp
            src/qt_gui/background_music_player.h
            src/qt_gui/cheats_patches.cpp
            src/qt_gui/cheats_patches.h
+           src/qt_gui/control_settings.cpp
+           src/qt_gui/control_settings.h
+           src/qt_gui/control_settings.ui
            src/qt_gui/main_window_ui.h
            src/qt_gui/main_window.cpp
            src/qt_gui/main_window.h
+           src/qt_gui/kbm_config_dialog.cpp
+           src/qt_gui/kbm_config_dialog.h
+           src/qt_gui/kbm_help_dialog.cpp
+           src/qt_gui/kbm_help_dialog.h
            src/qt_gui/gui_context_menus.h
            src/qt_gui/game_list_utils.h
            src/qt_gui/game_info.cpp
@@ -884,12 +894,8 @@ target_link_libraries(shadps4 PRIVATE Boost::headers GPUOpen::VulkanMemoryAlloca
 target_compile_definitions(shadps4 PRIVATE IMGUI_USER_CONFIG="imgui/imgui_config.h")
 target_compile_definitions(Dear_ImGui PRIVATE IMGUI_USER_CONFIG="${PROJECT_SOURCE_DIR}/src/imgui/imgui_config.h")
 
-if (ENABLE_DISCORD_RPC)
-    target_compile_definitions(shadps4 PRIVATE ENABLE_DISCORD_RPC)
-endif()
-
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    target_compile_definitions(shadps4 PRIVATE ENABLE_USERFAULTFD)
+    target_compile_definitions(shadps4 PRIVATE DISABLE_USERFAULTFD)
 endif()
 
 if (APPLE)
