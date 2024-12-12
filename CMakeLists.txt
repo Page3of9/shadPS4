@@ -25,9 +25,21 @@ if (ENABLE_LTO)
     add_compile_options(-flto=full)
 endif()
 
-option(ENABLE_PGO "Enables usage of profdata located in pgo directory for building with pgo enabled" OFF)
+option(ENABLE_PGO "Enable Profile-Guided Optimization" OFF)
 if (ENABLE_PGO)
-    add_compile_options(-fprofile-instr-use=${CMAKE_SOURCE_DIR}/pgo/default.profdata -Wno-profile-instr-unprofiled)
+    if (CMAKE_BUILD_TYPE STREQUAL "ProfileGenerate")
+        # Add flags for generating profiling data
+        message(STATUS "Building with PGO: Profile generation enabled")
+        add_compile_options(-fprofile-generate)
+        add_link_options(-fprofile-generate)
+    elseif (CMAKE_BUILD_TYPE STREQUAL "ProfileUse")
+        # Add flags for using profiling data
+        message(STATUS "Building with PGO: Using profile data")
+        add_compile_options(-fprofile-use=${CMAKE_SOURCE_DIR}/pgo/default.profdata -fprofile-correction)
+        add_link_options(-fprofile-use=${CMAKE_SOURCE_DIR}/pgo/default.profdata -fprofile-correction)
+    else()
+        message(WARNING "ENABLE_PGO is ON, but CMAKE_BUILD_TYPE is not ProfileGenerate or ProfileUse")
+    endif()
 endif()
 
 project(shadPS4)
