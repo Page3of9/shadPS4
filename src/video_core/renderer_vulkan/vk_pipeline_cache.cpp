@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <ranges>
+
 #include <list>
+#include <ranges>
 #include <unordered_map>
 #include "common/config.h"
 #include "common/hash.h"
@@ -42,7 +43,8 @@ public:
 
     Value* get(const Key& key) {
         auto it = cache_map.find(key);
-        if (it == cache_map.end()) return nullptr;
+        if (it == cache_map.end()) 
+            return nullptr;
 
         // Move accessed key to the front of the LRU list
         lru_list.splice(lru_list.begin(), lru_list, it->second.first);
@@ -69,7 +71,9 @@ public:
         }
     }
 
-    bool contains(const Key& key) const { return cache_map.find(key) != cache_map.end(); }
+    bool contains(const Key& key) const {
+        return cache_map.find(key) != cache_map.end(); 
+    }
 };
 
 PipelineCache::PipelineCache(const Instance& instance_, Scheduler& scheduler_,
@@ -105,8 +109,9 @@ const GraphicsPipeline* PipelineCache::GetGraphicsPipeline() {
     }
 
     // Create a new pipeline and add it to the cache
-    auto new_pipeline = std::make_unique<GraphicsPipeline>(
-        instance, scheduler, desc_heap, graphics_key, *pipeline_cache, infos, fetch_shader, modules);
+    auto new_pipeline = 
+        std::make_unique<GraphicsPipeline>(instance, scheduler, desc_heap, graphics_key, 
+                                           *pipeline_cache, infos, fetch_shader, modules);
     const auto* result = new_pipeline.get();
 
     graphics_pipeline_cache.insert(graphics_key, std::move(new_pipeline));
