@@ -43,7 +43,7 @@ using Shader::LogicalStage; // TODO
 using Shader::Stage;
 using Shader::VsOutput;
 
-// LRU Cache implementation for pipeline management
+// LRU Cache implementation for pipeline management hopefully
 class LRUCache {
     using Key = GraphicsPipelineKey;
     using Value = std::unique_ptr<GraphicsPipeline>;
