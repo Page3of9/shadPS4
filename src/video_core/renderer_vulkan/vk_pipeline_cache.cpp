@@ -215,6 +215,16 @@ PipelineCache::PipelineCache(const Instance& instance_, Scheduler& scheduler_,
     pipeline_cache = std::move(cache);
 }
 
+bool ShouldSkipShader(u64 shader_hash, const char* shader_type) {
+    static std::vector<u64> skip_hashes = {0xbddb8fc7, 0x9a987165, 0xbfed1ef4, 0x6faab5f9,
+                                           0x125a83c1, 0x8e3f8dc4, 0xfefebf9f};
+    if (std::ranges::contains(skip_hashes, shader_hash)) {
+        LOG_WARNING(Render_Vulkan, "Skipped {} shader hash {:#x}.", shader_type, shader_hash);
+        return true;
+    }
+    return false;
+}
+
 PipelineCache::~PipelineCache() = default;
 
 const GraphicsPipeline* PipelineCache::GetGraphicsPipeline() {
@@ -364,6 +374,10 @@ bool PipelineCache::RefreshGraphicsKey() {
             LOG_WARNING(Render_Vulkan, "Invalid binary info structure!");
             key.stage_hashes[stage_out_idx] = 0;
             infos[stage_out_idx] = nullptr;
+            return false;
+        }
+
+        if (ShouldSkipShader(bininfo.shader_hash, "graphics")) {
             return false;
         }
 
