@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include <ranges>
-
+#include <list>
+#include <unordered_map>
 #include "common/config.h"
 #include "common/hash.h"
 #include "common/io_file.h"
@@ -26,6 +27,93 @@ namespace Vulkan {
 using Shader::LogicalStage;
 using Shader::Stage;
 using Shader::VsOutput;
+
+// LRU Cache implementation for pipeline management
+class LRUCache {
+    using Key = GraphicsPipelineKey;
+    using Value = std::unique_ptr<GraphicsPipeline>;
+
+    size_t max_size;
+    std::list<Key> lru_list; // Track usage
+    std::unordered_map<Key, std::pair<std::list<Key>::iterator, Value>, KeyHash> cache_map;
+
+public:
+    explicit LRUCache(size_t maxSize) : max_size(maxSize) {}
+
+    Value* get(const Key& key) {
+        auto it = cache_map.find(key);
+        if (it == cache_map.end()) return nullptr;
+
+        // Move accessed key to the front of the LRU list
+        lru_list.splice(lru_list.begin(), lru_list, it->second.first);
+        return &it->second.second;
+    }
+
+    void insert(const Key& key, Value value) {
+        if (cache_map.find(key) != cache_map.end()) {
+            // Update and move to the front
+            lru_list.erase(cache_map[key].first);
+            lru_list.push_front(key);
+            cache_map[key] = {lru_list.begin(), std::move(value)};
+        } else {
+            // Insert new entry
+            lru_list.push_front(key);
+            cache_map[key] = {lru_list.begin(), std::move(value)};
+
+            // Evict if size exceeds limit
+            if (cache_map.size() > max_size) {
+                const Key& evicted_key = lru_list.back();
+                cache_map.erase(evicted_key);
+                lru_list.pop_back();
+            }
+        }
+    }
+
+    bool contains(const Key& key) const { return cache_map.find(key) != cache_map.end(); }
+};
+
+PipelineCache::PipelineCache(const Instance& instance_, Scheduler& scheduler_,
+                             AmdGpu::Liverpool* liverpool_)
+    : instance{instance_}, scheduler{scheduler_}, liverpool{liverpool_},
+      desc_heap{instance, scheduler.GetMasterSemaphore(), DescriptorHeapSizes},
+      graphics_pipeline_cache(6144) { // Initialize LRU cache with a size of 200
+    const auto& vk12_props = instance.GetVk12Properties();
+    profile = Shader::Profile{
+        .supported_spirv = instance.ApiVersion() >= VK_API_VERSION_1_3 ? 0x00010600U : 0x00010500U,
+        .subgroup_size = instance.SubgroupSize(),
+        .support_fp32_denorm_preserve = bool(vk12_props.shaderDenormPreserveFloat32),
+        .support_fp32_denorm_flush = bool(vk12_props.shaderDenormFlushToZeroFloat32),
+        .support_explicit_workgroup_layout = true,
+        .support_legacy_vertex_attributes = instance_.IsLegacyVertexAttributesSupported(),
+        .needs_manual_interpolation = instance.IsFragmentShaderBarycentricSupported() &&
+                                      instance.GetDriverID() == vk::DriverId::eNvidiaProprietary,
+    };
+    auto [cache_result, cache] = instance.GetDevice().createPipelineCacheUnique({});
+    ASSERT_MSG(cache_result == vk::Result::eSuccess, "Failed to create pipeline cache: {}",
+               vk::to_string(cache_result));
+    pipeline_cache = std::move(cache);
+}
+
+const GraphicsPipeline* PipelineCache::GetGraphicsPipeline() {
+    if (!RefreshGraphicsKey()) {
+        return nullptr;
+    }
+
+    // Check if the pipeline exists in the LRU cache
+    if (auto* cached_pipeline = graphics_pipeline_cache.get(graphics_key)) {
+        return cached_pipeline->get();
+    }
+
+    // Create a new pipeline and add it to the cache
+    auto new_pipeline = std::make_unique<GraphicsPipeline>(
+        instance, scheduler, desc_heap, graphics_key, *pipeline_cache, infos, fetch_shader, modules);
+    const auto* result = new_pipeline.get();
+
+    graphics_pipeline_cache.insert(graphics_key, std::move(new_pipeline));
+    return result;
+}
+
+// Other existing methods remain unchanged...
 
 constexpr static std::array DescriptorHeapSizes = {
     vk::DescriptorPoolSize{vk::DescriptorType::eUniformBuffer, 8192},
